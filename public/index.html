@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat con Node.js y Sockets</title>
+
+    <!-- NUEVO: estilos para mensajes propios y ajenos
+    <style>
+        #mensajes { list-style: none; padding: 0; }
+        #mensajes li { max-width: 60%; margin: 4px 0; padding: 8px 12px; border-radius: 12px; }
+        .propio { background: #dcf8c6; margin-left: auto; text-align: right; }
+        .ajeno { background: #eee; margin-right: auto; }
+    </style>
+    -->
+</head>
+<body>
+    <h1>Chat en tiempo real</h1>
+
+    <input
+        type="text"
+        id="mensaje"
+        placeholder="Escribe un mensaje..."
+    >
+    <button onclick="enviarMensaje()">
+        Enviar
+    </button>
+
+    <ul id="mensajes"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        // Conectar con el servidor
+        const socket = io();
+
+        // Enviar mensaje
+        function enviarMensaje() {
+            const input = document.getElementById("mensaje");
+
+            if (input.value.trim() !== "") {
+                socket.emit("mensaje", input.value);
+                input.value = "";
+            }
+        }
+
+        // Recibir mensajes
+        // socket.on("mensaje", (texto) => {
+        //     const lista = document.getElementById("mensajes");
+        //     const item = document.createElement("li");
+
+        //     item.textContent = texto;
+        //     lista.appendChild(item);
+        // });
+
+        // NUEVO: recibir {id, texto} y asignar clase según quién envió
+        socket.on("mensaje", ({ id, texto }) => {
+            const lista = document.getElementById("mensajes");
+            const item = document.createElement("li");
+        
+            item.textContent = texto;
+            item.classList.add(id === socket.id ? "propio" : "ajeno");
+            lista.appendChild(item);
+        });
+    </script>
+</body>
+</html>
