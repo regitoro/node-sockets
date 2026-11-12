@@ -14,14 +14,15 @@ io.on('connection', (socket) => {
     console.log('Usuario conectado', socket.id);
 
     //recibir mensajes
-    socket.on('mensaje', (texto) => {
-        console.log('mensaje recibido', texto);
+    //nuevo: ahora se recibe {nombre, texto}
+    socket.on('mensaje', ({nombre, texto}) => {
+        console.log('mensaje recibido', nombre, texto);
 
         //enviar mensaje a todos los clientes conectados
         //io.emit('mensaje', texto);
 
-        //nuevo: enviar tambien el id de quien emite el mensaje
-        io.emit("mensaje", {id: socket.id, texto});
+        //nuevo: enviar tambien el id y el nombre de quien emite el mensaje
+        io.emit("mensaje", {id: socket.id, nombre, texto});
     });
 
 //detectar desconexiones
@@ -31,7 +32,15 @@ socket.on("disconnect", () => {
 
 });
 
-server.listen(3000, () => {
-    console.log("servidor activo en http://localhost:3000");
+//para correrlo en local
+// server.listen(3000, () => {
+//     console.log("servidor activo en http://localhost:3000");
+// });
+
+//nuevo: usar el puerto que asigne el hosting (Render) o 3000 en local
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, () => {
+    console.log(`servidor activo en el puerto ${PORT}`);
 
 });
