@@ -159,6 +159,16 @@
             item.classList.add(id === socket.id ? "propio" : "ajeno");
             lista.appendChild(item);
         });
+
+        //anterior
+        // socket.on("mensaje", ({ id, texto }) => {
+        //     const lista = document.getElementById("mensajes");
+        //     const item = document.createElement("li");
+        
+        //     item.textContent = texto;
+        //     item.classList.add(id === socket.id ? "propio" : "ajeno");
+        //     lista.appendChild(item);
+        // });
     </script>
 </body>
 </html>
